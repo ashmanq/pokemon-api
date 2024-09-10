@@ -1,8 +1,7 @@
 from io import BytesIO
 import random
 import requests
-from django.http import JsonResponse
-from PIL import Image, ImageOps, ImageFilter, ImageDraw
+from PIL import Image
 import base64
 import re
 
@@ -20,6 +19,7 @@ def check_pokemon_id_against_name(id, name):
     ]
     return {
         "pokemonImage": correct_pokemon_url,
+        "pokemonName": correct_pokemon_name,
         "result": correct_pokemon_name == name,
     }
 

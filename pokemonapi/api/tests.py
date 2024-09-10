@@ -36,6 +36,7 @@ class APITestCase(TestCase):
         result = response.json()
         self.assertEqual(response.status_code, 200)
         self.assertFalse(False, result.get('result'))
+        self.assertTrue(result.get('pokemonName') == 'bulbasaur')
         
     def test_can_verify_pokemon_selection_from_api_end_point_and_get_true(self):
         url = reverse('verify-pokemon')

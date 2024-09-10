@@ -5,7 +5,7 @@ import json
 
 from api.utils.pokemonutils import get_game_round, get_pokemon_list, check_pokemon_id_against_name
 
-MAX_POKEMON = 400
+MAX_POKEMON = 150
 # We cache the list of pokemon for the first request then reuse
 pokemon_list_cache = []
 
