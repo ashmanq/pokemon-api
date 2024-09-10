@@ -13,8 +13,11 @@ pokemon_list_cache = []
 def get_random_pokemon_game_round(request):
     global pokemon_list_cache
     no_of_pokemon = request.GET.get('noOfPokemon', 4)
-    previous_pokemon_ids_string = request.GET.get('previousPokemonIds', [])
-    previous_pokemon_ids = json.loads(previous_pokemon_ids_string)
+    previous_pokemon_ids_string = request.GET.get('previousPokemonIds')
+    previous_pokemon_ids = []
+    if(previous_pokemon_ids_string):
+        previous_pokemon_ids = json.loads(previous_pokemon_ids_string)
+    
     try:
         if(len(pokemon_list_cache) < MAX_POKEMON):
             pokemon_list_cache = get_pokemon_list(MAX_POKEMON)
@@ -37,7 +40,7 @@ def verify_pokemon(request):
     
     try:
         checkResult = check_pokemon_id_against_name(id, name)
-        return JsonResponse({'result': checkResult})
+        return JsonResponse(checkResult)
     except requests.exceptions.RequestException as e:
          print("Error verifying Pokemon: ", str(e))
 

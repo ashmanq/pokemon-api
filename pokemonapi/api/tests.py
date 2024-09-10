@@ -99,13 +99,13 @@ class UtilsTestCase(TestCase):
         checkResult = check_pokemon_id_against_name(
             self.test_name_and_id[0].get("id"), self.pokemon_list[0].get("name")
         )
-        self.assertTrue(checkResult)
+        self.assertTrue(checkResult.get('result'))
 
     def test_can_check_id_against_name_is_incorrect(self):
         checkResult = check_pokemon_id_against_name(
             self.test_name_and_id[1].get("id"), self.pokemon_list[1].get("name")
         )
-        self.assertFalse(checkResult)
+        self.assertFalse(checkResult.get('result'))
         
     def test_get_game_round(self):
         """Function should return a game round"""
