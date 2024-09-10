@@ -4,6 +4,7 @@ import requests
 from django.http import JsonResponse
 from PIL import Image, ImageOps, ImageFilter, ImageDraw
 import base64
+import re
 POKEMON_API_URL = "https://pokeapi.co/api/v2"
 
 #Function to check Pokemon ID against name
@@ -27,8 +28,8 @@ def get_pokemon_image(image_url):
 
 # Function that returns a game round with a Pokemon ID, 4 Pokemon options
 # and an image outline
-def get_game_round(pokemon_list, no_of_options):
-    options_list = get_random_list(pokemon_list, no_of_options)
+def get_game_round(pokemon_list, no_of_options, ignore_list = []) -> list:
+    options_list = get_random_list(pokemon_list, no_of_options, ignore_list)
     selected_pokemon = options_list[random.randrange(0, len(options_list))]
     
     pokemon_details_response = requests.get(selected_pokemon.get('url'))
@@ -47,30 +48,31 @@ def get_game_round(pokemon_list, no_of_options):
     }
     return round
     
-def get_pokemon_list(num_of_pokemon):
+def get_pokemon_list(num_of_pokemon) -> list:
     response = requests.get(f'{POKEMON_API_URL}/pokemon?limit={num_of_pokemon}' )
     responseResult = response.json()
     return responseResult.get('results', [])
 
-def return_name(list):
+def return_name(list) -> str:
     return list.get('name', '')
 
 # Function takes in a list and returns a random sub list of random_list_length
-def get_random_list(item_list, random_list_length):
+def get_random_list(item_list, random_list_length, ignore_list = []):
     list_length = len(item_list)
-    if (random_list_length > list_length):
+    if (random_list_length > (list_length - len(ignore_list))):
         print("List size requested exceeds length of given list!")
         return None
     number_array = []
     results = []
     while(len(number_array) < random_list_length):
         randNum = random.randrange(0, list_length)
-        if((randNum in number_array) == False):
+        selectedItemId = re.search(r'/pokemon/(\d+)/$', item_list[randNum].get('url')).group(1)
+        if((randNum in number_array) == False and (int(selectedItemId) in ignore_list) == False):
             number_array.append(randNum)
             results.append(item_list[randNum])
     return results
 
-def encode_image_base64(img):
+def encode_image_base64(img) -> str:
     img_io = BytesIO()
     img.save(img_io, format='PNG')
     img_io.seek(0)

@@ -4,6 +4,7 @@ from api.utils.pokemonutils import (
     get_random_list,
     get_game_round,
     check_pokemon_id_against_name,
+    return_name,
 )
 from rest_framework.test import APIClient
 
@@ -76,6 +77,17 @@ class UtilsTestCase(TestCase):
         are_all_unique = len(num_array_set) == len(num_array)
         self.assertTrue(are_all_unique)
         self.assertEqual(random_array_length, len(num_array))
+        
+    def test_random_list_shouldnt_contain_anything_in_ignore_list(self):
+        random_array_length = 3
+        ignore_list = [4, 5, 6]
+        num_array = get_random_list(self.pokemon_list, random_array_length, ignore_list)
+        num_array_names = []
+        for item in num_array:
+            num_array_names.append(item["name"])
+        self.assertFalse('charmander' in num_array_names)
+        self.assertFalse('charmeleon' in num_array_names)
+        self.assertFalse('charizard' in num_array_names)
 
     def test_get_random_list_with_bad_inputs(self):
         """Function should return None if no of results exceeds range"""

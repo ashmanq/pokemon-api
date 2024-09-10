@@ -1,7 +1,7 @@
 import requests
 from rest_framework import status
 from django.http import JsonResponse
-from django.shortcuts import render
+import json
 
 from api.utils.pokemonutils import get_game_round, get_pokemon_list, check_pokemon_id_against_name
 
@@ -11,13 +11,15 @@ pokemon_list_cache = []
 
 
 def get_random_pokemon_game_round(request):
-    no_of_pokemon = request.GET.get('noOfPokemon', 4)
     global pokemon_list_cache
+    no_of_pokemon = request.GET.get('noOfPokemon', 4)
+    previous_pokemon_ids_string = request.GET.get('previousPokemonIds', [])
+    previous_pokemon_ids = json.loads(previous_pokemon_ids_string)
     try:
         if(len(pokemon_list_cache) < MAX_POKEMON):
             pokemon_list_cache = get_pokemon_list(MAX_POKEMON)
             
-        pokemon_game_round = get_game_round(pokemon_list_cache, int(no_of_pokemon))
+        pokemon_game_round = get_game_round(pokemon_list_cache, int(no_of_pokemon), previous_pokemon_ids)
         return JsonResponse(pokemon_game_round)
 
     except requests.exceptions.RequestException as e:

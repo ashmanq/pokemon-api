@@ -47,6 +47,7 @@ This end point will return the following:
 - `pokemonOptions` - a list of pokemon to select from
 - `selectedPokemonIndex` - An index of the correct pokemon
 - `pokemonImage` - Base64 data of the Pokemon silhouette
+- `previousPokemonIds` - An array of IDs of previous played pokemon to ignore when getting new round
 - `error` - Will be returned if any errors occurs in the request with a message
 
 ### Verify Pokemon
