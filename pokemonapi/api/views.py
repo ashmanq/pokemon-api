@@ -55,7 +55,7 @@ class GetPokemonGameRound(APIView):
             pokemon_game_round = get_game_round(pokemon_list_cache, int(no_of_pokemon), previous_pokemon_ids)
             return JsonResponse(pokemon_game_round)
 
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             print("Error getting Pokemon: ", str(e))
             return JsonResponse({'error': "Error getting random Pokemon!" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -98,7 +98,8 @@ class VerifyPokemon(APIView):
         try:
             checkResult = check_pokemon_id_against_name(id, name)
             return JsonResponse(checkResult)
-        except requests.exceptions.RequestException as e:
+        
+        except Exception as e:
             print("Error verifying Pokemon: ", str(e))
             return JsonResponse({'error': "Error verifying Pokemon!" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

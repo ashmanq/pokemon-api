@@ -4,15 +4,19 @@ import requests
 from PIL import Image
 import base64
 import re
+import time
+import random
+import requests
 
 POKEMON_API_URL = "https://pokeapi.co/api/v2"
 
 
 # Function to check Pokemon ID against name
 def check_pokemon_id_against_name(id, name):
-    print(f"{POKEMON_API_URL}/{id}")
-    response = requests.get(f"{POKEMON_API_URL}/pokemon/{id}")
-    result = response.json()
+    url = f"{POKEMON_API_URL}/pokemon/{id}"
+    # response = requests.get(f"{POKEMON_API_URL}/pokemon/{id}")
+    # result = response.json()
+    result = api_call_with_exponential_backoff(url, "json")
     correct_pokemon_name = result["species"]["name"]
     correct_pokemon_url = result["sprites"]["other"]["official-artwork"][
         "front_default"
@@ -26,7 +30,7 @@ def check_pokemon_id_against_name(id, name):
 
 # Function to get Pokemon image silhouette
 def get_pokemon_image(image_url):
-    response = requests.get(image_url)
+    response = api_call_with_exponential_backoff(image_url)
     img = Image.open(BytesIO(response.content))
     mask = img.getchannel("A")
     colored_layer = Image.new("RGBA", img.size, "#07679a")
@@ -42,8 +46,9 @@ def get_game_round(pokemon_list, no_of_options, ignore_list=[]) -> list:
     options_list = get_random_list(pokemon_list, no_of_options, ignore_list)
     selected_pokemon = options_list[random.randrange(0, len(options_list))]
 
-    pokemon_details_response = requests.get(selected_pokemon.get("url"))
-    pokemon_details = pokemon_details_response.json()
+    # pokemon_details_response = requests.get(selected_pokemon.get("url"))
+    # pokemon_details = pokemon_details_response.json()
+    pokemon_details = api_call_with_exponential_backoff(selected_pokemon.get("url"), "json")
     selected_pokemon_index = pokemon_details.get("id")
 
     selected_pokemon_image_url = pokemon_details["sprites"]["other"][
@@ -62,8 +67,8 @@ def get_game_round(pokemon_list, no_of_options, ignore_list=[]) -> list:
 
 
 def get_pokemon_list(num_of_pokemon) -> list:
-    response = requests.get(f"{POKEMON_API_URL}/pokemon?limit={num_of_pokemon}")
-    responseResult = response.json()
+    url = f"{POKEMON_API_URL}/pokemon?limit={num_of_pokemon}"
+    responseResult = api_call_with_exponential_backoff(url, "json")
     return responseResult.get("results", [])
 
 
@@ -99,3 +104,23 @@ def encode_image_base64(img) -> str:
 
     encoded_img = base64.b64encode(img_io.getbuffer()).decode("utf-8")
     return encoded_img
+
+# Function to carry out API calls with exponential backoff
+def api_call_with_exponential_backoff(url, response_type = "", max_retries = 3):
+    retry_delay = 100/1000 # Get milliseconds
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            if(response_type == "json"):
+                return response.json()
+            return response
+        except requests.RequestException:
+            print(f"Retrying after {retry_delay * 1000} milliseconds")
+            time.sleep(retry_delay)
+            retry_delay *= 2
+            retry_delay += (random.uniform(0.001, .006)) # Adds jitter
+        except Exception as e:
+            print(str(e))
+            
+    raise Exception(f"Maximum retry attempts reached!")
