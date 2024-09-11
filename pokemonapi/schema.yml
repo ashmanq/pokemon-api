@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Ashir Pokemon API
+  version: 1.0.0
+  description: A backend that gets and manipulates data from the pokeapi API and returns
+    game data for a pokemon guessing game.
+paths:
+  /pokemon/random/:
+    get:
+      operationId: pokemon_random_retrieve
+      description: An end point that verifies a Pokemon name selected in a game round
+        against the correct Pokemon's ID.
+      parameters:
+      - in: query
+        name: noOfPokemon
+        schema:
+          type: integer
+        description: Number of Pokemon name options to return
+      - in: query
+        name: previousPokemonIds
+        schema:
+          type: string
+        description: The previous correct Pokemon included here to ensure they aren't
+          used again as a stringified array
+      tags:
+      - pokemon
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pokemonOptions:
+                    type: array
+                    items:
+                      type: string
+                  selectedPokemonIndex:
+                    type: integer
+                  pokemonImage:
+                    type: string
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+          description: ''
+  /pokemon/verify/:
+    get:
+      operationId: pokemon_verify_retrieve
+      description: An end point that verifies a Pokemon name selected in a game round
+        against the correct Pokemon's ID.
+      parameters:
+      - in: query
+        name: id
+        schema:
+          type: string
+        description: Pokemon ID to verify against
+        required: true
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Selected Pokemon name to verify
+        required: true
+      tags:
+      - pokemon
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pokemonImage:
+                    type: string
+                  pokemonName:
+                    type: string
+                  result:
+                    type: boolean
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+          description: ''
+components: {}
