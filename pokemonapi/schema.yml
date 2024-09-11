@@ -5,7 +5,7 @@ info:
   description: A backend that gets and manipulates data from the pokeapi API and returns
     game data for a pokemon guessing game.
 paths:
-  /pokemon/random/:
+  /api/pokemon/random/:
     get:
       operationId: pokemon_random_retrieve
       description: An end point that verifies a Pokemon name selected in a game round
@@ -58,7 +58,7 @@ paths:
                   error:
                     type: string
           description: ''
-  /pokemon/verify/:
+  /api/pokemon/verify/:
     get:
       operationId: pokemon_verify_retrieve
       description: An end point that verifies a Pokemon name selected in a game round

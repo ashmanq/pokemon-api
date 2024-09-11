@@ -65,3 +65,6 @@ You can send the following query properties:
 This end point will return the following:
 - `result` - A boolean result of either `true` or `false`
 - `error` - Will be returned if any errors occurs in the request with a message
+
+### API Documentation
+This API uses Swagger for API documentation. You can view this on the API route: `api/schema/swagger-ui/` when the back end API is running.
