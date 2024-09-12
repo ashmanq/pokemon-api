@@ -17,7 +17,7 @@ source .venv/bin/activate
 
 Once you have started the environment you will need to install the required Python libraries. From inside the shell environment run the following command:
 ```bash
-pip install -r requirements.txt
+pip install -r pokemonapi/requirements.txt
 ```
 
 **Make sure you are in the home directory of the project when you do this.**

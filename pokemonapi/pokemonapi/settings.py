@@ -26,7 +26,10 @@ SECRET_KEY = 'django-insecure-cva3xwpp&)pqi)@xtil4bha9(61*ek=l+ctmvb39+&@qbq)jbn
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost',
+    'ashqur.co.uk/pokemon-api'
+    'ashqur.com/pokemon-api'
+    'ashir.co.uk/pokemon-api'
 ]
 
 
