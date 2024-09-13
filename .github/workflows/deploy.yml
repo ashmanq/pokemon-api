@@ -62,10 +62,10 @@ jobs:
           # We then we move out of the virtual environment and recreate the restart.txt file in the tmp folder which will 
           # restart the passenger virtual environment.
           ssh -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST_ADDRESS << 'EOF'
-            source $VIRTUAL_ENV_COMMAND
-            cd $SERVER_PROJECT_FOLDER
+            source ${VIRTUAL_ENV_COMMAND}
+            cd ${SERVER_PROJECT_FOLDER}
             pip install -r requirements.txt  
             deactivate
-            touch $SERVER_PROJECT_FOLDER/tmp/restart.txt
+            touch ${SERVER_PROJECT_FOLDER}/tmp/restart.txt
           EOF
         shell: bash
