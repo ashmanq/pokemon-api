@@ -18,7 +18,7 @@ load_dotenv()
 
 # Loading environment variables
 IS_PRODUCTION = os.getenv('DJANGO_PRODUCTION') == 'true'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') if os.getenv('ALLOWED_HOSTS') else []
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
