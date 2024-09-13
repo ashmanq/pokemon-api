@@ -1,7 +1,7 @@
 # Pokemon API
 
 ## Instructions
-To run locally you will need to have python installed
+To run locally you will need to have python installed.
 
 Once the repo is downloaded you will need to setup a Pythong environment for the first time using the following command:
 
@@ -19,10 +19,11 @@ Once you have started the environment you will need to install the required Pyth
 ```bash
 pip install -r pokemonapi/requirements.txt
 ```
-
 **Make sure you are in the home directory of the project when you do this.**
 
-To then run the api cd into the project folder and use the following command (from inside the environment shell):
+You will need to create a `.env` file in the root folder of the project and add in the required environment variables. Refer to `env.example` to see what environment variables are required.
+
+To then run the API change into the project directory and use the following command (from inside the environment shell):
 
 ```bash
 cd pokemonapi

@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+# Loading environment variables
+IS_PRODUCTION = os.getenv('DJANGO_PRODUCTION') == 'true'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,17 +29,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cva3xwpp&)pqi)@xtil4bha9(61*ek=l+ctmvb39+&@qbq)jbn'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if IS_PRODUCTION else True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    'ashqur.co.uk/pokemon-api'
-    'ashqur.com/pokemon-api'
-    'ashir.co.uk/pokemon-api'
-]
+ALLOWED_HOSTS = ALLOWED_HOSTS
 
 
 # Application definition
@@ -152,3 +156,6 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
+
+if IS_PRODUCTION:
+    FORCE_SCRIPT_NAME = '/pokemon/'
