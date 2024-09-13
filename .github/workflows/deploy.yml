@@ -46,9 +46,9 @@ jobs:
         run: |
           cd pokemonapi
           touch .env
-          echo SECRET_KEY="$SECRET_KEY"
-          echo ALLOWED_HOSTS="$ALLOWED_HOSTS"
-          echo DJANGO_PRODUCTION=true
+          echo SECRET_KEY="${SECRET_KEY}" > .env
+          echo ALLOWED_HOSTS="${ALLOWED_HOSTS}" > .env
+          echo DJANGO_PRODUCTION=true > .env
           ls -al
 
       - name: Copy Files to Host Server
