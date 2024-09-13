@@ -23,15 +23,15 @@ jobs:
 
             - name: Install Python Dependencies
               run: |
-                cd pokemonapi 
-                pip install -r requirements.txt
-                cd ..
+                cd pokemonapi && pip install -r requirements.txt
 
             - name: Check Syntax
-              run: python manage.py check
+              run: |
+                cd pokemonapi && python manage.py check
             
             - name: Run Tests
-              run: python manage.py test
+              run: |
+                cd pokemonapi && python manage.py test
 
     create-release:
         name: Create App Release
