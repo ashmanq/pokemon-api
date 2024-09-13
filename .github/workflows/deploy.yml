@@ -1,0 +1,60 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      node_version:
+        type: 'string'
+        required: true
+        default: '20'
+      release_version:
+        description: 'Select version to release'
+        type: 'string'
+        required: true
+jobs:
+  deploy:
+    name: Deploy to hosted website
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: 'refs/tags/v${{ inputs.release_version }}'
+          fetch-depth: 0
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Install rsync
+        run: sudo apt install -y rsync
+      
+      - name: Create SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+          sudo chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_HOST_ADDRESS }} >> ~/.ssh/known_hosts
+    
+      - name: Create environment file
+        run: |
+          cd pokemonapi
+          touch .env
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }}
+          echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}
+          echo DJANGO_PRODUCTION=true
+          ls -al
+
+      - name: Copy Files to Host Server
+        run: |
+          cd pokemonapi
+          rsync -aP . ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST_ADDRESS }}:${{ secrets.SERVER_PROJECT_FOLDER }}
+
+      - name: SSH Into Remote Server
+        run: |
+          # SSH into the server then move to the correct folder, go into the virtual environment and install requirements.
+          # We then we move out of the virtual environment and recreate the restart.txt file in the tmp folder which will 
+          # restart the passenger virtual environment.
+          ssh ${{ secrets.SERVER_USERNAME}}@${{ secrets.SERVER_HOST_ADDRESS}}
+          cd ${{ secrets.SERVER_PROJECT_FOLDER }}
+          ${{ secrets.OPEN_VIRTUAL_ENVIRONMENT_COMMAND }}
+          pip install -r requirements.txt  
+          deactivate
+          touch tmp/restart.txt
