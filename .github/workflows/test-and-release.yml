@@ -22,7 +22,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Install Python Dependencies
-              run: pip install -r requirements.txt
+              run: cd pokemonapi && pip install -r requirements.txt
 
             - name: Check Syntax
               run: python manage.py check
