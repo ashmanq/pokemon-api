@@ -29,7 +29,7 @@ jobs:
           git config user.email ${{ secrets.USER_EMAIL }}
 
       - name: Update Version
-        run: git tag -a v${{ inputs.release_version }}
+        run: git tag -a v${{ inputs.release_version }} -m "version v${{ inputs.release_version }}"
         
       - name: Merge develop into main branch
         run: |
