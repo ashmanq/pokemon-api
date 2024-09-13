@@ -37,8 +37,8 @@ jobs:
         run: |
           cd pokemonapi
           touch .env
-          echo SECRET_KEY=${{ secrets.SECRET_KEY }}
-          echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}
+          echo SECRET_KEY="${{ secrets.SECRET_KEY }}"
+          echo ALLOWED_HOSTS="${{ secrets.ALLOWED_HOSTS }}""
           echo DJANGO_PRODUCTION=true
           ls -al
 
