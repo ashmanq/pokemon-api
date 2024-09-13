@@ -1,0 +1,40 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      main_branch:
+        required: true
+        type: string
+        default: 'main'
+      release_version:
+        description: 'Set version to release'
+        required: true
+        type: string
+
+
+jobs:
+  release:
+    name: Create A Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name ${{ secrets.USER_NAME }}
+          git config user.email ${{ secrets.USER_EMAIL }}
+
+      - name: Update Version
+        run: git tag -a v${{ inputs.release_version }}
+        
+      - name: Merge develop into main branch
+        run: |
+          git checkout ${{ inputs.main_branch }}
+          git merge develop --no-ff -m "Merge develop"
+  
+      - name: Push changes
+        run: git push --all --follow-tags
