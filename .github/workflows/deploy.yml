@@ -63,9 +63,8 @@ jobs:
           # restart the passenger virtual environment.
           ssh -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST_ADDRESS << 'EOF'
             $OPEN_VIRTUAL_ENVIRONMENT_COMMAND
-            # cd $SERVER_PROJECT_FOLDER
             pip install -r requirements.txt  
             deactivate
-            touch tmp/restart.txt
+            touch $SERVER_PROJECT_FOLDER/tmp/restart.txt
           EOF
         shell: bash
