@@ -12,7 +12,6 @@ on:
         type: 'string'
         required: true
 env:
-  PERSONAL_ACESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
   SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
   SERVER_HOST_ADDRESS: ${{ secrets.SERVER_HOST_ADDRESS }}
   SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
@@ -31,7 +30,7 @@ jobs:
         with:
           ref: 'refs/tags/v${{ inputs.release_version }}'
           fetch-depth: 0
-          token: $PERSONAL_ACCESS_TOKEN
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Install rsync
         run: sudo apt install -y rsync
