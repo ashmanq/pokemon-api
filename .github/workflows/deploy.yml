@@ -61,10 +61,11 @@ jobs:
           # SSH into the server then move to the correct folder, go into the virtual environment and install requirements.
           # We then we move out of the virtual environment and recreate the restart.txt file in the tmp folder which will 
           # restart the passenger virtual environment.
-          ssh $SERVER_USERNAME@$SERVER_HOST_ADDRESS
-          ls -al
-          cd $SERVER_PROJECT_FOLDER
-          $OPEN_VIRTUAL_ENVIRONMENT_COMMAND
-          pip install -r requirements.txt  
-          deactivate
-          touch tmp/restart.txt
+          ssh -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST_ADDRESS << 'EOF'
+            ls -al
+            cd $SERVER_PROJECT_FOLDER
+            $OPEN_VIRTUAL_ENVIRONMENT_COMMAND
+            pip install -r requirements.txt  
+            deactivate
+            touch tmp/restart.txt
+          EOF
