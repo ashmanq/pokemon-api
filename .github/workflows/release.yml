@@ -23,10 +23,10 @@ jobs:
         with:
           fetch-depth: 0
 
-    #   - name: Set up Git
-    #     run: |
-    #       git config user.name ${{ secrets.USER_NAME }}
-    #       git config user.email ${{ secrets.USER_EMAIL }}
+      - name: Set up Git
+        run: |
+          git config user.name ${{ secrets.USER_NAME }}
+          git config user.email ${{ secrets.USER_EMAIL }}
 
       - name: Update Version
         run: git tag -a v${{ inputs.release_version }}
