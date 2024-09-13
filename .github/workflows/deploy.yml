@@ -46,9 +46,9 @@ jobs:
         run: |
           cd pokemonapi
           touch .env
-          echo SECRET_KEY="${SECRET_KEY}" > .env
-          echo ALLOWED_HOSTS="${ALLOWED_HOSTS}" > .env
-          echo DJANGO_PRODUCTION=true > .env
+          echo SECRET_KEY="${SECRET_KEY}" >> .env
+          echo ALLOWED_HOSTS="${ALLOWED_HOSTS}" >> .env
+          echo DJANGO_PRODUCTION=true >> .env
           ls -al
 
       - name: Copy Files to Host Server
@@ -62,10 +62,10 @@ jobs:
           # We then we move out of the virtual environment and recreate the restart.txt file in the tmp folder which will 
           # restart the passenger virtual environment.
           ssh -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST_ADDRESS << 'EOF'
-            ls -al
-            cd $SERVER_PROJECT_FOLDER
             $OPEN_VIRTUAL_ENVIRONMENT_COMMAND
+            # cd $SERVER_PROJECT_FOLDER
             pip install -r requirements.txt  
             deactivate
             touch tmp/restart.txt
           EOF
+        shell: bash
