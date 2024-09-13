@@ -11,12 +11,15 @@ on:
     pull_request:
         branches:
             - main
-            - develop
+            - develop 
 
 jobs:
     test:
         name: Test Django App
         runs-on: ubuntu-latest
+        env:
+          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
@@ -34,7 +37,7 @@ jobs:
                 cd pokemonapi && python manage.py test
 
     create-release:
-        name: Create App Release
+        name: Create Release
         runs-on: ubuntu-latest
         permissions:
             contents: write
