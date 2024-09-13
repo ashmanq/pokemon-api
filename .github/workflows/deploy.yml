@@ -18,7 +18,7 @@ env:
   SERVER_PROJECT_FOLDER: ${{ secrets.SERVER_PROJECT_FOLDER }}
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
   ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-  OPEN_VIRTUAL_ENVIRONMENT_COMMAND: ${{ secrets.OPEN_VIRTUAL_ENVIRONMENT_COMMAND }}
+  VIRTUAL_ENV_COMMAND: ${{ secrets.VIRTUAL_ENV_COMMAND }}
 
 jobs:
   deploy:
@@ -62,7 +62,8 @@ jobs:
           # We then we move out of the virtual environment and recreate the restart.txt file in the tmp folder which will 
           # restart the passenger virtual environment.
           ssh -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST_ADDRESS << 'EOF'
-            $OPEN_VIRTUAL_ENVIRONMENT_COMMAND
+            source $VIRTUAL_ENV_COMMAND
+            cd $SERVER_PROJECT_FOLDER
             pip install -r requirements.txt  
             deactivate
             touch $SERVER_PROJECT_FOLDER/tmp/restart.txt
